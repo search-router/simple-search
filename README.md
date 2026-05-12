@@ -54,6 +54,35 @@ uvicorn app.main:app --reload
 The home page works immediately (mock-backed). Set `SEARCH_ROUTER_API_KEY` in
 `.env` to switch the Search Router adapter to its real upstream.
 
+## Getting a Search Router API key
+
+The bundled real adapter calls the Search Router API at
+`https://search-router.com/api/search` and authenticates with the
+`X-API-Key` header.
+
+[search-router.com](https://search-router.com) gives you:
+
+- **2000 free credits to start.**
+- When your balance drops below 500, top it up with another **2,000
+  credits for free** — unlimited refills while the promotion is active.
+
+To obtain a key:
+
+1. Sign up at [https://search-router.com](https://search-router.com).
+2. Open your account dashboard and create an API key.
+3. Copy the key into your local `.env`:
+
+   ```bash
+   SEARCH_ROUTER_API_KEY=sr_live_xxxxxxxxxxxxxxxxxxxxxxxx
+   ```
+
+4. Restart the app (`docker compose up --build` or `uvicorn …`). The
+   `/api/v1/backends` endpoint will now report `search_router` as ready
+   and queries will hit the real upstream.
+
+Without a key, the adapter transparently falls back to the deterministic
+mock backend — you can develop and demo the UI without signing up.
+
 ## Configuration
 
 Configuration lives in `.env` (secrets and environment-level knobs) and
@@ -65,7 +94,7 @@ Configuration lives in `.env` (secrets and environment-level knobs) and
 | `APP_ENV`               | no       | `dev`         | `dev` or `prod`; tightens defaults in prod.                             |
 | `APP_CONFIG_FILE`       | no       | `config.yaml` | Path to the declarative config file.                                    |
 | `LOG_LEVEL`             | no       | `INFO`        | Standard Python logging levels.                                         |
-| `SEARCH_ROUTER_API_KEY` | no       | _(empty)_     | Real Search Router credentials. Empty → adapter falls back to mock.     |
+| `SEARCH_ROUTER_API_KEY` | no       | _(empty)_     | Real Search Router credentials — get one at [search-router.com](https://search-router.com). Empty → adapter falls back to mock. |
 | `REDIS_URL`             | no       | _(empty)_     | Optional cache. Empty → `NullCache`.                                    |
 | `ADMIN_TOKEN`           | prod     | _(empty)_     | Required to call `/api/v1/health` and `/api/v1/backends`.               |
 | `SESSION_SECRET`        | prod     | _(empty)_     | Signs ads-cabinet session cookies. Empty in dev → ephemeral per-process. |
