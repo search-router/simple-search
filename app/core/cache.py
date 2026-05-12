@@ -99,7 +99,7 @@ def make_cache_key(search_type: str, backend: str, payload: str | bytes) -> str:
 
     Accepts the JSON form (e.g. ``pydantic`` ``model_dump_json``) directly so we
     skip the dict→json round-trip the previous implementation did. ``blake2b``
-    is ~2–3x faster than ``sha256`` on short inputs and ample for cache keys
+    is ~2-3x faster than ``sha256`` on short inputs and ample for cache keys
     (no cryptographic adversary on the other side).
     """
     if isinstance(payload, str):

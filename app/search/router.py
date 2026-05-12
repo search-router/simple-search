@@ -201,9 +201,7 @@ def _make_requires(
     def _check(caps: BackendCapabilities) -> bool:
         if not kind_cap(caps):
             return False
-        if needs_pagination and not caps.pagination:
-            return False
-        return True
+        return not (needs_pagination and not caps.pagination)
 
     return _check
 
