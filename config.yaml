@@ -1,0 +1,102 @@
+app:
+  name: search-service
+  version: "1.0.0"
+  public_base_url: "http://localhost:8000"
+  default_ui_locale: en
+  default_direction: ltr
+  default_theme: auto
+
+search:
+  max_limit: 100
+  fallback_order:
+    - search_router
+
+  backends:
+    search_router:
+      enabled: true
+      type: search_router
+      base_url: "https://search-router.com"
+      api_key_env: SEARCH_ROUTER_API_KEY
+      timeout_ms: 5000
+      max_results: 100
+
+routing:
+  rules:
+    - when:
+        type: web
+      prefer: search_router
+    - when:
+        type: images
+      prefer: search_router
+
+circuit_breaker:
+  failure_threshold: 5
+  recovery_timeout_seconds: 60
+  half_open_max_requests: 1
+
+i18n:
+  default_ui_locale: en
+  supported_locales:
+    - en
+    - ru
+    - ar
+    - he
+    - fa
+    - ur
+  rtl_languages: [ar, he, fa, ur, yi, dv, ps]
+
+cache:
+  enabled: true
+  redis_url_env: REDIS_URL
+  web_default_ttl_seconds: 600
+  images_default_ttl_seconds: 1800
+  latest_query_ttl_seconds: 60
+
+ads:
+  enabled: true
+  signup_balance: 1000
+  db_path: ./data/ads.sqlite
+  session_secret_env: SESSION_SECRET
+  # Set to false only for local dev over plain HTTP; deployments behind HTTPS
+  # must leave this true so the session cookie is never sent in clear.
+  session_https_only: true
+  session_max_age_seconds: 604800
+  queries:
+    - "купить телефон"
+    - "доставка цветов"
+    - "авиабилеты москва дубай"
+    - "онлайн курсы python"
+    - "hotel in dubai"
+    - "cheap laptops"
+    - "pizza near me"
+    - "book a flight"
+    - "running shoes"
+    - "vpn for mac"
+
+security:
+  rate_limit_per_minute: 60
+  max_upload_size_mb: 10
+  max_response_size_mb: 5
+  cors_allowed_origins:
+    - "http://localhost:8000"
+    - "http://127.0.0.1:8000"
+  cors_allowed_headers:
+    - Content-Type
+    - Authorization
+    - X-Request-ID
+  allowed_hosts:
+    - localhost
+    - 127.0.0.1
+    - testserver
+  hsts_enabled: true
+  admin_token_env: ADMIN_TOKEN
+  # Trust X-Forwarded-* only behind a proxy you operate. Off by default so
+  # spoofed headers cannot bypass per-IP rate limiting or fake HTTPS.
+  trust_forwarded_headers: false
+  # CSRF defense for unsafe-method routes: incoming Origin/Referer must match
+  # one of these. Leave empty to disable the check.
+  csrf_allowed_origins:
+    - "http://localhost:8000"
+    - "http://127.0.0.1:8000"
+  # Set true in prod so an unset ADMIN_TOKEN refuses /health and /backends.
+  require_admin_token: false

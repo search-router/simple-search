@@ -1,0 +1,12 @@
+<div class="error-banner" role="alert" dir="auto">
+  <div class="error-banner__title">{{ error.title }}</div>
+  <div>{{ error.message }}</div>
+  <div class="error-banner__actions">
+    {% if error.try_other %}
+      <a href="{{ error.try_other }}" class="button button--secondary">{{ t('error.try_other') }}</a>
+    {% endif %}
+    {% if error.request_id %}
+      <span class="subtle">request: {{ error.request_id }}</span>
+    {% endif %}
+  </div>
+</div>

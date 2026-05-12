@@ -1,0 +1,76 @@
+{% macro web_card(result) %}
+<article class="result-card" lang="{{ result.language or '' }}" dir="auto">
+  <div class="result-card__breadcrumb">
+    <img class="result-card__favicon" loading="lazy" alt="" src="https://www.google.com/s2/favicons?domain={{ result.domain or '' }}&sz=64" onerror="this.style.visibility='hidden'">
+    <span>{{ result.domain or '' }}</span>
+    <span class="result-card__path">· {{ result.url|truncate(72, true) }}</span>
+  </div>
+  <h2 class="result-card__title">
+    <a href="{{ result.url }}" target="_blank" rel="noopener noreferrer">{{ result.title or result.url }}</a>
+  </h2>
+  {% if result.snippet %}
+    <p class="result-card__snippet">{{ result.snippet }}</p>
+  {% endif %}
+  {% if result.published_at or result.language %}
+  <div class="result-card__meta">
+    {% if result.published_at %}<span class="tag">{{ result.published_at.strftime('%Y-%m-%d') }}</span>{% endif %}
+    {% if result.language %}<span class="tag">{{ result.language }}</span>{% endif %}
+  </div>
+  {% endif %}
+</article>
+{% endmacro %}
+
+{% macro image_tile(result) %}
+<button
+  type="button"
+  class="image-tile"
+  data-lightbox
+  data-image-url="{{ result.image_url }}"
+  data-page-url="{{ result.page_url }}"
+  data-domain="{{ result.domain or '' }}"
+  data-title="{{ result.title or '' }}"
+  data-dimensions="{% if result.width and result.height %}{{ result.width }}×{{ result.height }}{% endif %}"
+  aria-label="{{ result.title or result.page_url }}"
+>
+  <img
+    src="{{ result.thumbnail_url or result.image_url }}"
+    alt="{{ result.title or '' }}"
+    loading="lazy"
+    decoding="async"
+    referrerpolicy="no-referrer"
+    onerror="this.parentElement.style.background='var(--color-surface-3)';this.style.opacity='0.0';"
+  >
+  <div class="image-tile__overlay" dir="auto">
+    {% if result.title %}<span class="image-tile__title">{{ result.title }}</span>{% endif %}
+    <span class="image-tile__meta">
+      {% if result.width and result.height %}{{ result.width }}×{{ result.height }} · {% endif %}{{ result.domain or '' }}
+    </span>
+  </div>
+</button>
+{% endmacro %}
+
+{% macro pagination(page, has_next, t) %}
+<nav class="pagination" aria-label="pagination">
+  {% if page > 0 %}
+    <a class="pagination__link" href="?{{ pagination_link(page - 1) }}" rel="prev">
+      <svg class="pagination__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      {{ t('pagination.prev') }}
+    </a>
+  {% else %}
+    <span class="pagination__link" aria-disabled="true">{{ t('pagination.prev') }}</span>
+  {% endif %}
+  <span class="pagination__indicator">{{ t('pagination.page', page=page + 1) }}</span>
+  {% if has_next %}
+    <a class="pagination__link" href="?{{ pagination_link(page + 1) }}" rel="next">
+      {{ t('pagination.next') }}
+      <svg class="pagination__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M9 6l6 6-6 6"/>
+      </svg>
+    </a>
+  {% else %}
+    <span class="pagination__link" aria-disabled="true">{{ t('pagination.next') }}</span>
+  {% endif %}
+</nav>
+{% endmacro %}

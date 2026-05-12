@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import image_tile, pagination with context %}
+{% block title %}{{ query }} — {{ t('nav.images') }}{% endblock %}
+{% block main %}
+<section class="container-narrow stack-lg">
+  {% include "partials/search_bar.html" %}
+</section>
+
+<section class="container-wide stack" style="margin-block-start: var(--space-8);">
+  {% if error %}
+    {% include "partials/error_banner.html" %}
+  {% endif %}
+
+  {% if response %}
+    {% include "partials/ad_banner.html" %}
+    <div class="results-meta">
+      <div class="flex">
+        <strong>{{ t('results.count', count=response.total_results) }}</strong>
+        {% if response.cache_hit %}<span class="tag tag--success">{{ t('result.cached') }}</span>{% endif %}
+        <span class="subtle">· {{ response.response_time_ms }} ms</span>
+      </div>
+    </div>
+
+    {% if response.results %}
+      <div class="image-grid">
+        {% for result in response.results %}
+          {{ image_tile(result) }}
+        {% endfor %}
+      </div>
+      {{ pagination(response.page, response.results|length >= response.limit, t) }}
+    {% else %}
+      <div class="empty-state">
+        <h2>{{ t('empty.title') }}</h2>
+        <p>{{ t('empty.hint') }}</p>
+      </div>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

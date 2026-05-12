@@ -1,0 +1,16 @@
+{
+  "web": [
+    {
+      "title": "Async I/O in Python",
+      "url": "https://docs.example.com/async",
+      "domain": "docs.example.com",
+      "snippet": "An overview of async I/O patterns."
+    },
+    {
+      "title": "FastAPI tutorial",
+      "url": "https://blog.example.com/fastapi",
+      "domain": "blog.example.com",
+      "snippet": "Build async APIs with FastAPI."
+    }
+  ]
+}

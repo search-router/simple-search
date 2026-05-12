@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}{{ t('ads.cabinet_title') }} — {{ t('app.title') }}{% endblock %}
+{% block main %}
+<section class="container stack-lg">
+  <header class="cabinet-header">
+    <div>
+      <p class="eyebrow">{{ t('ads.cabinet_eyebrow') }}</p>
+      <h1>{{ t('ads.cabinet_greeting', username=user.username) }}</h1>
+      <p class="muted">{{ t('ads.cabinet_subtitle') }}</p>
+    </div>
+    <div class="wallet-card">
+      <span class="wallet-card__label">{{ t('ads.wallet') }}</span>
+      <span class="wallet-card__value">{{ user.wallet }}</span>
+      <span class="wallet-card__unit">{{ t('ads.coins') }}</span>
+    </div>
+  </header>
+
+  {% if flash %}
+    <div class="error-banner{% if flash_kind == 'success' %} error-banner--success{% endif %}" role="alert">
+      <div class="error-banner__title">{{ flash }}</div>
+    </div>
+  {% endif %}
+
+  <section class="stats-grid" aria-label="{{ t('ads.stats_title') }}">
+    <div class="stat-card">
+      <span class="stat-card__label">{{ t('ads.stat_spent') }}</span>
+      <span class="stat-card__value">{{ summary.spent }}</span>
+      <span class="stat-card__unit">{{ t('ads.coins') }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">{{ t('ads.stat_impressions') }}</span>
+      <span class="stat-card__value">{{ summary.impressions }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">{{ t('ads.stat_clicks') }}</span>
+      <span class="stat-card__value">{{ summary.clicks }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">{{ t('ads.stat_ctr') }}</span>
+      <span class="stat-card__value">{{ summary.ctr }}</span>
+    </div>
+  </section>
+
+  <p class="muted">{{ t('ads.auction_explainer') }}</p>
+
+  <section class="bid-create">
+    <h2>{{ t('ads.new_bid_title') }}</h2>
+    <p class="muted">{{ t('ads.new_bid_subtitle') }}</p>
+    <form class="bid-form" method="post" action="/cabinet/bid">
+      <div class="bid-form__grid">
+        <label class="bid-form__query">
+          <span>{{ t('ads.field_query') }}</span>
+          <input
+            type="text"
+            name="query"
+            value="{{ form.query }}"
+            required
+            maxlength="200"
+            placeholder="{{ t('ads.field_query_placeholder') }}"
+            list="suggested-queries"
+            autocomplete="off"
+          >
+          {% if suggested_queries %}
+            <datalist id="suggested-queries">
+              {% for q in suggested_queries %}<option value="{{ q }}"></option>{% endfor %}
+            </datalist>
+          {% endif %}
+        </label>
+        <label class="bid-form__match">
+          <span>{{ t('ads.field_match_mode') }}</span>
+          <select name="match_mode">
+            <option value="exact"{% if form.match_mode == 'exact' %} selected{% endif %}>{{ t('ads.match_exact') }}</option>
+            <option value="phrase"{% if form.match_mode == 'phrase' %} selected{% endif %}>{{ t('ads.match_phrase') }}</option>
+          </select>
+          <small class="muted">
+            <strong>{{ t('ads.match_exact') }}:</strong> {{ t('ads.match_exact_hint') }}<br>
+            <strong>{{ t('ads.match_phrase') }}:</strong> {{ t('ads.match_phrase_hint') }}
+          </small>
+        </label>
+        <label>
+          <span>{{ t('ads.field_title') }}</span>
+          <input type="text" name="title" value="{{ form.title }}" required maxlength="120" placeholder="{{ t('ads.field_title_placeholder') }}">
+        </label>
+        <label>
+          <span>{{ t('ads.field_url') }}</span>
+          <input type="url" name="url" value="{{ form.url }}" required minlength="8" maxlength="400" placeholder="https://example.com">
+        </label>
+        <label class="bid-form__snippet">
+          <span>{{ t('ads.field_snippet') }}</span>
+          <input type="text" name="snippet" value="{{ form.snippet }}" maxlength="240" placeholder="{{ t('ads.field_snippet_placeholder') }}">
+        </label>
+        <label class="bid-form__amount">
+          <span>{{ t('ads.field_amount') }}</span>
+          <input type="number" name="amount" value="{{ form.amount }}" required min="1" max="{{ user.wallet }}" placeholder="1">
+        </label>
+      </div>
+      <div class="bid-form__actions">
+        <button type="submit" class="button">{{ t('ads.action_place') }}</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="bid-list-section">
+    <h2>{{ t('ads.your_bids_title') }}</h2>
+    {% if not rows %}
+      <p class="muted">{{ t('ads.no_bids_yet_long') }}</p>
+    {% else %}
+      <ol class="bid-list">
+        {% for row in rows %}
+          {% set bid = row.bid %}
+          <li class="bid-row">
+            <div class="bid-row__head">
+              <h3 class="bid-row__query">"{{ bid.query_normalized }}"</h3>
+              <div class="bid-row__status">
+                {% if bid.match_mode == 'exact' %}
+                  <span class="tag">{{ t('ads.match_exact') }}</span>
+                {% else %}
+                  <span class="tag">{{ t('ads.match_phrase') }}</span>
+                {% endif %}
+                <span class="tag tag--success">{{ t('ads.bid_amount', amount=bid.amount) }}</span>
+                {% if row.paused %}
+                  <span class="tag tag--danger">{{ t('ads.bid_paused') }}</span>
+                {% endif %}
+              </div>
+            </div>
+            <dl class="bid-row__stats">
+              <div><dt>{{ t('ads.stat_impressions') }}</dt><dd>{{ row.stats.impressions }}</dd></div>
+              <div><dt>{{ t('ads.stat_clicks') }}</dt><dd>{{ row.stats.clicks }}</dd></div>
+              <div><dt>{{ t('ads.stat_ctr') }}</dt><dd>{{ row.stats.ctr }}</dd></div>
+              <div><dt>{{ t('ads.stat_spent') }}</dt><dd>{{ row.stats.spent }} {{ t('ads.coins') }}</dd></div>
+            </dl>
+            <form class="bid-form bid-form--inline" method="post" action="/cabinet/bid">
+              <input type="hidden" name="query" value="{{ bid.query_normalized }}">
+              <input type="hidden" name="match_mode" value="{{ bid.match_mode }}">
+              <div class="bid-form__grid">
+                <label>
+                  <span>{{ t('ads.field_title') }}</span>
+                  <input type="text" name="title" value="{{ bid.title }}" required maxlength="120">
+                </label>
+                <label>
+                  <span>{{ t('ads.field_url') }}</span>
+                  <input type="url" name="url" value="{{ bid.url }}" required minlength="8" maxlength="400">
+                </label>
+                <label class="bid-form__snippet">
+                  <span>{{ t('ads.field_snippet') }}</span>
+                  <input type="text" name="snippet" value="{{ bid.snippet }}" maxlength="240">
+                </label>
+                <label class="bid-form__amount">
+                  <span>{{ t('ads.field_amount') }}</span>
+                  <input type="number" name="amount" value="{{ bid.amount }}" required min="1" max="{{ user.wallet }}">
+                </label>
+              </div>
+              <div class="bid-form__actions">
+                <button type="submit" class="button">{{ t('ads.action_save') }}</button>
+                <button type="submit" class="button button--ghost" formaction="/cabinet/bid/delete" formnovalidate>{{ t('ads.action_delete') }}</button>
+              </div>
+            </form>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

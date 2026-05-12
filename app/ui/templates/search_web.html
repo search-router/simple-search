@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import web_card, pagination with context %}
+{% block title %}{{ query }} — {{ t('app.title') }}{% endblock %}
+{% block main %}
+<section class="container-narrow stack-lg">
+  {% include "partials/search_bar.html" %}
+</section>
+
+<section class="container stack" style="margin-block-start: var(--space-8);">
+  {% if error %}
+    {% include "partials/error_banner.html" %}
+  {% endif %}
+
+  {% if response %}
+    {% include "partials/ad_banner.html" %}
+    <div class="results-meta">
+      <div class="flex">
+        <strong>{{ t('results.count', count=response.total_results) }}</strong>
+        {% if response.cache_hit %}<span class="tag tag--success">{{ t('result.cached') }}</span>{% endif %}
+        <span class="subtle">· {{ response.response_time_ms }} ms</span>
+      </div>
+      <div class="subtle">{{ t('pagination.page', page=response.page + 1) }}</div>
+    </div>
+
+    {% if response.results %}
+      <ol class="result-list" reversed="false">
+        {% for result in response.results %}
+          <li>{{ web_card(result) }}</li>
+        {% endfor %}
+      </ol>
+      {{ pagination(response.page, response.results|length >= response.limit, t) }}
+    {% else %}
+      <div class="empty-state">
+        <h2>{{ t('empty.title') }}</h2>
+        <p>{{ t('empty.hint') }}</p>
+      </div>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

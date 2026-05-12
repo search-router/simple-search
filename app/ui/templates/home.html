@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ t('app.title') }} — {{ t('app.tagline') }}{% endblock %}
+{% block main %}
+<section class="container-narrow">
+  <div class="hero">
+    <p class="eyebrow">{{ t('app.title') }}</p>
+    {% include "partials/search_bar.html" %}
+  </div>
+</section>
+{% endblock %}

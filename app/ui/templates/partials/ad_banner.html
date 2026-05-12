@@ -1,0 +1,18 @@
+{% if ad %}
+{% set ad_click_href = "/ads/click/" ~ ad.bid_id ~ ("?r=" ~ request_id if request_id else "") %}
+<aside class="ad-banner" aria-label="{{ t('ads.sponsored_label') }}">
+  <span class="ad-banner__tag">{{ t('ads.sponsored') }}</span>
+  <div class="ad-banner__body">
+    <div class="ad-banner__breadcrumb">{{ ad.url|truncate(72, true) }}</div>
+    <h2 class="ad-banner__title">
+      <a href="{{ ad_click_href }}" target="_blank" rel="noopener noreferrer nofollow sponsored">{{ ad.title }}</a>
+    </h2>
+    {% if ad.snippet %}
+      <p class="ad-banner__snippet">{{ ad.snippet }}</p>
+    {% endif %}
+    <div class="ad-banner__meta">
+      <span class="tag tag--accent">{{ t('ads.by_advertiser', advertiser=ad.advertiser) }}</span>
+    </div>
+  </div>
+</aside>
+{% endif %}

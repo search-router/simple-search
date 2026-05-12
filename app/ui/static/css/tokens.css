@@ -1,0 +1,144 @@
+:root {
+  color-scheme: light dark;
+
+  --color-bg: #FAFAF7;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #F2F1EC;
+  --color-surface-3: #ECEAE2;
+  --color-border: #E4E2DA;
+  --color-border-strong: #C9C6BC;
+  --color-text: #15171C;
+  --color-text-muted: #5A6068;
+  --color-text-subtle: #878D96;
+  --color-accent: #3B5BDB;
+  --color-accent-strong: #2945B6;
+  --color-accent-soft: #E7ECFD;
+  --color-link-visited: #7B3F9D;
+  --color-success: #2F855A;
+  --color-success-soft: #E2F4EA;
+  --color-warning: #B7791F;
+  --color-warning-soft: #FCEFD3;
+  --color-danger: #C53030;
+  --color-danger-soft: #FCE4E4;
+  --color-focus-ring: rgba(59, 91, 219, 0.36);
+  --color-shadow: rgba(20, 23, 28, 0.06);
+  --color-overlay: rgba(20, 23, 28, 0.45);
+
+  --font-family-body: system-ui, -apple-system, "Segoe UI", "Helvetica Neue",
+    "Noto Sans", "Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans Devanagari",
+    sans-serif;
+  --font-family-display: "Inter", system-ui, sans-serif;
+  --font-family-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --line-tight: 1.25;
+  --line-snug: 1.4;
+  --line-normal: 1.6;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 4rem;
+  --space-16: 5rem;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(20, 23, 28, 0.04), 0 1px 1px rgba(20, 23, 28, 0.06);
+  --shadow-md: 0 4px 12px rgba(20, 23, 28, 0.06), 0 2px 4px rgba(20, 23, 28, 0.04);
+  --shadow-lg: 0 16px 40px rgba(20, 23, 28, 0.10), 0 4px 12px rgba(20, 23, 28, 0.06);
+
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --container-narrow: 720px;
+  --container-base: 1080px;
+  --container-wide: 1280px;
+}
+
+[data-theme="dark"] {
+  --color-bg: #0E1116;
+  --color-surface: #161A21;
+  --color-surface-2: #1F242C;
+  --color-surface-3: #262C36;
+  --color-border: #2A313B;
+  --color-border-strong: #3A434F;
+  --color-text: #E8EAEE;
+  --color-text-muted: #9098A4;
+  --color-text-subtle: #6B7380;
+  --color-accent: #728DFF;
+  --color-accent-strong: #97AEFF;
+  --color-accent-soft: #1B2240;
+  --color-link-visited: #B58BD6;
+  --color-success: #5DC58A;
+  --color-success-soft: #18301F;
+  --color-warning: #E8B864;
+  --color-warning-soft: #3A2E13;
+  --color-danger: #F08585;
+  --color-danger-soft: #3D1B1B;
+  --color-focus-ring: rgba(114, 141, 255, 0.4);
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-overlay: rgba(0, 0, 0, 0.6);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --color-bg: #0E1116;
+    --color-surface: #161A21;
+    --color-surface-2: #1F242C;
+    --color-surface-3: #262C36;
+    --color-border: #2A313B;
+    --color-border-strong: #3A434F;
+    --color-text: #E8EAEE;
+    --color-text-muted: #9098A4;
+    --color-text-subtle: #6B7380;
+    --color-accent: #728DFF;
+    --color-accent-strong: #97AEFF;
+    --color-accent-soft: #1B2240;
+    --color-link-visited: #B58BD6;
+    --color-success: #5DC58A;
+    --color-success-soft: #18301F;
+    --color-warning: #E8B864;
+    --color-warning-soft: #3A2E13;
+    --color-danger: #F08585;
+    --color-danger-soft: #3D1B1B;
+    --color-focus-ring: rgba(114, 141, 255, 0.4);
+    --color-shadow: rgba(0, 0, 0, 0.5);
+    --color-overlay: rgba(0, 0, 0, 0.6);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

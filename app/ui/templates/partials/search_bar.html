@@ -1,0 +1,40 @@
+<form class="search-form" method="get" action="/search" role="search" dir="ltr">
+  <input type="hidden" name="ui_locale" value="{{ ui_locale }}">
+  <input type="hidden" name="type" value="{{ active_type or 'web' }}">
+  <div class="flex" style="justify-content: center;">
+    <div class="segmented" role="tablist">
+      <button
+        type="submit"
+        name="type"
+        value="web"
+        class="segmented__option {% if (active_type or 'web') == 'web' %}segmented__option--active{% endif %}"
+        aria-pressed="{{ 'true' if (active_type or 'web') == 'web' else 'false' }}">
+        {{ t('nav.web') }}
+      </button>
+      <button
+        type="submit"
+        name="type"
+        value="images"
+        class="segmented__option {% if active_type == 'images' %}segmented__option--active{% endif %}"
+        aria-pressed="{{ 'true' if active_type == 'images' else 'false' }}">
+        {{ t('nav.images') }}
+      </button>
+    </div>
+  </div>
+  <label class="search-bar" for="search-input">
+    <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="M21 21l-4.3-4.3"/>
+    </svg>
+    <input
+      type="search"
+      id="search-input"
+      name="q"
+      value="{{ query or '' }}"
+      placeholder="{% if active_type == 'images' %}{{ t('search.placeholder_images') }}{% else %}{{ t('search.placeholder') }}{% endif %}"
+      autocomplete="off"
+      autofocus
+      dir="auto">
+    <button type="submit" class="search-bar__submit">{{ t('search.button') }}</button>
+  </label>
+</form>

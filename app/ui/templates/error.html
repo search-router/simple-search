@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ t('error.internal_error') }}{% endblock %}
+{% block main %}
+<section class="container-narrow stack-lg">
+  {% include "partials/error_banner.html" %}
+  <a class="button button--secondary" href="/">← {{ t('nav.home') }}</a>
+</section>
+{% endblock %}

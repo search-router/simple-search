@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ t('ads.auth_title') }} — {{ t('app.title') }}{% endblock %}
+{% block main %}
+<section class="container-narrow">
+  <div class="auth-card stack-lg">
+    <header>
+      <p class="eyebrow">{{ t('ads.auth_eyebrow') }}</p>
+      <h1>{{ t('ads.auth_title') }}</h1>
+      <p class="muted">{{ t('ads.auth_subtitle', balance=1000) }}</p>
+    </header>
+
+    {% if error %}
+      <div class="error-banner" role="alert">
+        <div class="error-banner__title">{{ error }}</div>
+      </div>
+    {% endif %}
+
+    <form class="auth-form" method="post" autocomplete="on">
+      <label class="auth-field">
+        <span class="auth-field__label">{{ t('ads.auth_username') }}</span>
+        <input type="text" name="username" value="{{ login_value or '' }}" required minlength="3" maxlength="32" autocomplete="username" autofocus>
+      </label>
+      <label class="auth-field">
+        <span class="auth-field__label">{{ t('ads.auth_password') }}</span>
+        <input type="password" name="password" required minlength="8" maxlength="128" autocomplete="current-password">
+      </label>
+      <p class="muted">{{ t('ads.auth_hint') }}</p>
+      <div class="auth-actions">
+        <button type="submit" class="button" formaction="/auth/login">{{ t('ads.auth_login') }}</button>
+        <button type="submit" class="button button--secondary" formaction="/auth/register">{{ t('ads.auth_register') }}</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
