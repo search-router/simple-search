@@ -89,7 +89,8 @@ class RateLimitMiddleware:
         if trust_xff:
             for name, value in scope["headers"]:
                 if name == b"x-forwarded-for":
-                    return value.decode("latin-1").split(",")[0].strip()
+                    decoded: str = value.decode("latin-1")
+                    return decoded.split(",")[0].strip()
         client = scope.get("client")
         return client[0] if client else "unknown"
 
