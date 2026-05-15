@@ -6,18 +6,32 @@
 [![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://docs.astral.sh/ruff/)
 [![Typed: mypy](https://img.shields.io/badge/typed-mypy-blue.svg)](https://mypy-lang.org/)
 
-A clean, RTL-ready metasearch service: one API and one UI in front of pluggable
-search providers. Ships with an adapter for **Search Router** plus deterministic
-mock backends that let the UI run beautifully without any API keys, and an
-entry-point-based plugin system for dropping in your own adapters.
+**An open-source reference / demo application built on top of the [Search Router API](https://search-router.com).** This repository is not the Search Router API itself, and it is not an MCP server — it is a self-contained metasearch service (FastAPI + Jinja UI) that shows how to integrate the API in a production-shaped app: pluggable backend adapters, deterministic mocks for keyless local dev, Redis caching, circuit breaker, RTL UI, and a small demo ads cabinet.
+
+The hosted API lives at [search-router.com](https://search-router.com). This repo is the recommended starting point if you want a working end-to-end example you can fork.
 
 <p align="center">
   <img src="docs/images/home-light.png" alt="Home page, light theme" width="49%" />
   <img src="docs/images/home-dark.png" alt="Home page, dark theme" width="49%" />
 </p>
 
+## What this repo is — and isn't
+
+**Is:**
+
+- A working reference UI + service on top of the Search Router API.
+- A template you can fork: drop in your own backend adapter, ship.
+- A keyless demo: `docker compose up` and you have a real-looking search UI backed by deterministic mocks.
+
+**Isn't:**
+
+- The Search Router API itself — that's a hosted service at [search-router.com](https://search-router.com).
+- An MCP server. (If you're looking for the Search Router MCP, see [search-router.com](https://search-router.com).)
+- A production drop-in. Read [docs/deployment.md](docs/deployment.md) before exposing it.
+
 ## Features
 
+- **Use cases:** grounding LLM answers with fresh web data, agent tool calls, and building search/RAG-adjacent UIs. The Search Router API returns titles, URLs, and snippets across multiple search engines; full-page Infocontexts are on the upstream roadmap.
 - **Backend:** Python 3.12+, FastAPI, Pydantic v2, httpx, defusedxml.
 - **Frontend:** Server-rendered Jinja2 with a small modern design system —
   light/dark, logical CSS properties, full RTL coverage for `ar`, `he`, `fa`,
@@ -31,6 +45,7 @@ entry-point-based plugin system for dropping in your own adapters.
   `search_service.backends` entry point — no fork required.
 - **Production-minded:** Circuit breaker, structured JSON logging, security
   headers, CSRF, rate limiting, admin-token-gated health/introspection.
+- **Demo ads cabinet:** Included `app/ads/` package (auction, auth, storage, throttling) illustrates how a monetization layer could plug into a search UI. It's a demo surface, not part of the Search Router API.
 
 ## Quick start
 
@@ -56,9 +71,10 @@ The home page works immediately (mock-backed). Set `SEARCH_ROUTER_API_KEY` in
 
 ## Getting a Search Router API key
 
-The bundled real adapter calls the Search Router API at
-`https://search-router.com/api/search` and authenticates with the
-`X-API-Key` header.
+The bundled adapter calls the Search Router API at
+`https://search-router.com/api/search` (header `X-API-Key`). The API returns
+search results — titles, URLs, snippets, and image metadata — suitable for
+grounding LLMs and powering search UIs.
 
 [search-router.com](https://search-router.com) gives you:
 
